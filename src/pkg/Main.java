@@ -1,5 +1,5 @@
 
-package pkg08rsalibreria;
+package pkg;
 
 import java.io.*;
 import java.nio.channels.Channel;
