@@ -4,6 +4,7 @@ package pkg;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,28 +17,34 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
         rsa=new RSA();
         
-        JFrame frame = new JFrame("Telefono");      
+        JFrame frame = new JFrame("rsa swing");      
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);      
-        frame.setSize(480, 360); 
+        frame.setSize(960, 360); 
         
         JPanel keygen=new JPanel();
-        String keygenstr="generar claves \n";
+        keygen.setLayout(new BoxLayout(keygen, BoxLayout.Y_AXIS));
+        String keygenstr="generar claves";
         JLabel keygenlabel = new JLabel(keygenstr);
+        JLabel keygenpublic = new JLabel(" ");
+        JLabel keygenprivate = new JLabel(" ");
         keygenbtn=new JButton("generar");
         keygenbtn.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 String[] keys=rsa.getKeys();
-                keygenlabel.setText(keygenstr+"publica: "+keys[0]+"\n privada: "+keys[1]+"\n");
+                keygenpublic.setText("publica: "+keys[0]);
+                keygenprivate.setText("privada: "+keys[1]);
             }
 
         });
         
         keygen.add(keygenlabel);
+        keygen.add(keygenpublic);
+        keygen.add(keygenprivate);
         keygen.add(keygenbtn);
         
-        frame.getContentPane().add(BorderLayout.NORTH, keygen);
+        frame.getContentPane().add(keygen);
         
         frame.setVisible(true); 
     }

@@ -24,7 +24,7 @@ public class Main {
         KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA", "BC");
         
         //inicializar llave
-        keygen.initialize(512);
+        keygen.initialize(3);
         
         //vamos a asignar la llave publica y privada
         KeyPair clavesRSA=keygen.generateKeyPair();
