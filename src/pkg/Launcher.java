@@ -56,7 +56,7 @@ public class Launcher {
         
         JPanel cipher=new JPanel();
         cipher.setLayout(new BoxLayout(cipher, BoxLayout.Y_AXIS));
-        JLabel cipherin = new JLabel("num a cifrar/num ya cifrado: ");
+        JLabel cipherin = new JLabel("texto a cifrar/cifrado: ");
         JTextArea cipherintxt = new JTextArea(5, 20);
         cipherintxt.setLineWrap(true);
         cipherintxt.setWrapStyleWord(true);

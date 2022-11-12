@@ -42,7 +42,7 @@ public class RSA {
         KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA", "BC");
         
         //inicializar llave
-        keygen.initialize(26);
+        keygen.initialize(512);
         
         //vamos a asignar la llave publica y privada
         KeyPair clavesRSA=keygen.generateKeyPair();
@@ -66,12 +66,20 @@ public class RSA {
             Cipher cifrado = Cipher.getInstance("RSA", "BC");
             
             if(text.length()<=64){
-                int num=Integer.parseInt(text);
-                byte[] bufferplano = BigInteger.valueOf(num).toByteArray();
+                byte[] bufferplano = bytesFromString(text);
+                System.out.println("uwu "+bufferplano.length);
                 //ciframos con publica
-                PublicKey clave= getKey(key);
-                cifrado.init(Cipher.ENCRYPT_MODE, clave);
+                try{
+                    PublicKey clave= getKey(key);
 
+                    cifrado.init(Cipher.ENCRYPT_MODE, clave);
+                    System.out.println("cypher with public");
+                }catch(Exception e){
+                    System.out.println("cypher with private");
+                    PrivateKey clave= getKeyPriv(key);
+
+                    cifrado.init(Cipher.ENCRYPT_MODE, clave);
+                }
                 System.out.println("3 ciframos con clave public: ");
 
                 byte[] buffercifrado = cifrado.doFinal(bufferplano);
@@ -91,11 +99,7 @@ public class RSA {
     public String decifrar(String text, String key){
         String result="";
         byte[] des=decipher(text, key);
-        int num=0;
-        for (byte b : des) {
-            num = (num << 8) + (b & 0xFF);
-        }
-        result=String.valueOf(num);
+        result=stringFromBytes(des);
         return result;
     }
     private byte[] decipher(String text, String key){
@@ -103,8 +107,17 @@ public class RSA {
             Cipher cifrado = Cipher.getInstance("RSA", "BC");
             
             //desciframos con privada
-            PrivateKey clave= getKeyPriv(key);
-            cifrado.init(Cipher.DECRYPT_MODE, clave);
+            try{
+                    PublicKey clave= getKey(key);
+
+                    cifrado.init(Cipher.DECRYPT_MODE, clave);
+                    System.out.println("decypher with public");
+                }catch(Exception e){
+                    System.out.println("decypher with private");
+                    PrivateKey clave= getKeyPriv(key);
+
+                    cifrado.init(Cipher.DECRYPT_MODE, clave);
+                }
 
             System.out.println("4 descipher con clave priv");
 
@@ -151,6 +164,23 @@ public class RSA {
 
         return null;
     }
+    private byte[] bytesFromString(String text){
+        /*byte[] res = new byte[text.length()];
+        for(int i=0; i<text.length();i++){
+            res[i]=(byte)text.charAt(i);
+        }*/
+        byte[] res=text.getBytes(StandardCharsets.UTF_8);
+        return res;
+    }
+    private String stringFromBytes(byte[] bytes){
+        /*String res="";
+        for(int i=0; i<bytes.length;i++){
+            res+=(char)bytes[i];
+        }*/
+        String res = new String(bytes, StandardCharsets.UTF_8);
+        return res;
+    }
+    
     private static void mostrarBytes(byte[] buffer) {
         System.out.write(buffer, 0, buffer.length);
     }
